@@ -1,24 +1,25 @@
-﻿class SimpleGame {
+﻿/**
+ * Created by aksharpatel on 27/03/15.
+ */
+/// <reference path="Phaser/phaser.d.ts"/>
+/// <reference path="Boot.ts"/>
+/// <reference path="Preloader.ts"/>
+/// <reference path="Menu.ts"/>
+/// <reference path="Play.ts"/>
 
-    constructor() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, "content", { preload: this.preload, create: this.create });
+module Castlevania {
+    export class Game extends Phaser.Game {
+        constructor() {
+            super(800, 600, Phaser.AUTO, '');
+            this.state.add('Boot', Boot, false);
+            this.state.add('Preloader', Preloader, false);
+            this.state.add('MainMenu', Menu, false);
+            this.state.add('Level1', Level1, false);
+            this.state.start('Boot');
+        }
     }
-
-    game: Phaser.Game;
-
-    preload() {
-        this.game.load.image("logo", "Assets/phaser.png");
-    }
-
-    create() {
-        var logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "logo");
-        logo.anchor.setTo(0.5, 0.5);
-    }
-
 }
 
 window.onload = () => {
-
-    var game = new SimpleGame();
-
+    new Castlevania.Game();
 };
