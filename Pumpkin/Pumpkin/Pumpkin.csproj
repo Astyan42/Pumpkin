@@ -19,6 +19,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="Assets\corde.png" />
     <Content Include="Assets\phaser.png" />
     <Content Include="index.html" />
     <Content Include="Phaser\phaser.js" />
@@ -27,9 +28,13 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
+    <TypeScriptCompile Include="Boot.ts" />
+    <TypeScriptCompile Include="Menu.ts" />
     <TypeScriptCompile Include="Phaser\p2.d.ts" />
     <TypeScriptCompile Include="Phaser\phaser.d.ts" />
     <TypeScriptCompile Include="Phaser\pixi.d.ts" />
+    <TypeScriptCompile Include="Play.ts" />
+    <TypeScriptCompile Include="Preloader.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Phaser\phaser.map" />

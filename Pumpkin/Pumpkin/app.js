@@ -17,12 +17,12 @@ var Castlevania;
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
-            _super.call(this, 800, 600, Phaser.AUTO, '');
-            this.state.add('Boot', Castlevania.Boot, false);
-            this.state.add('Preloader', Castlevania.Preloader, false);
-            this.state.add('MainMenu', Castlevania.Menu, false);
-            this.state.add('Play', Castlevania.Play, false);
-            this.state.start('Boot');
+            _super.call(this, 800, 600, Phaser.AUTO, "");
+            this.state.add("Boot", Castlevania.Boot, false);
+            this.state.add("Preloader", Castlevania.Preloader, false);
+            this.state.add("Menu", Castlevania.Menu, false);
+            this.state.add("Play", Castlevania.Play, false);
+            this.state.start("Boot");
         }
         return Game;
     })(Phaser.Game);

@@ -10,16 +10,23 @@ var __extends = (this && this.__extends) || function (d, b) {
 /// <reference path="Phaser/phaser.d.ts"/>
 var Castlevania;
 (function (Castlevania) {
-    var Level1 = (function (_super) {
-        __extends(Level1, _super);
-        function Level1() {
+    var Play = (function (_super) {
+        __extends(Play, _super);
+        function Play() {
             _super.apply(this, arguments);
         }
-        Level1.prototype.create = function () {
-            this.physics.startSystem(Phaser.Physics.ARCADE);
+        Play.prototype.preload = function () {
+            this.game.load.image('sprite', 'assets/corde.png');
         };
-        return Level1;
+        Play.prototype.create = function () {
+            this.physics.startSystem(Phaser.Physics.ARCADE);
+            this.tilesprite = this.game.add.tileSprite(0, 0, 20, 20, "sprite");
+        };
+        Play.prototype.update = function () {
+            this.tilesprite.width = this.tilesprite.width + 25;
+        };
+        return Play;
     })(Phaser.State);
-    Castlevania.Level1 = Level1;
+    Castlevania.Play = Play;
 })(Castlevania || (Castlevania = {}));
 //# sourceMappingURL=Play.js.map

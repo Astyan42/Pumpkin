@@ -10,7 +10,7 @@ module Castlevania {
         }
 
         public startMainMenu() {
-            this.game.state.start('Menu', true, false);
+            this.game.state.start("Menu", true, false);
         }
     }
 }

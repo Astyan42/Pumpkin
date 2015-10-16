@@ -1,4 +1,3 @@
-C:\Users\jdeveaux\Documents\Visual Studio 2013\Projects\Pumpkin\Pumpkin\Pumpkin\obj\Debug\Pumpkin.csprojResolveAssemblyReference.cache
 C:\Users\jdeveaux\Documents\Visual Studio 2013\Projects\Pumpkin\Pumpkin\Pumpkin\bin\Pumpkin.dll.config
 C:\Users\jdeveaux\Documents\Visual Studio 2013\Projects\Pumpkin\Pumpkin\Pumpkin\bin\Pumpkin.dll
 C:\Users\jdeveaux\Documents\Visual Studio 2013\Projects\Pumpkin\Pumpkin\Pumpkin\bin\Pumpkin.pdb

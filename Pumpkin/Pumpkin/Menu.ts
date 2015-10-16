@@ -10,7 +10,7 @@ module Castlevania {
         }
         
         startGame() {
-            this.game.state.start('Play', true, false);
+            this.game.state.start("Play", true, false);
         }
     }
 }
