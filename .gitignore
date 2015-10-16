@@ -273,3 +273,8 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+*.user
+Pumpkin/Pumpkin/Pumpkin.csproj.user
+Pumpkin/Pumpkin/obj/Debug/Pumpkin.csproj.FileListAbsolute.txt
+*.cache
+Pumpkin/Pumpkin.v12.suo
