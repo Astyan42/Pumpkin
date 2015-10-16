@@ -14,7 +14,7 @@ module Castlevania {
             this.state.add('Boot', Boot, false);
             this.state.add('Preloader', Preloader, false);
             this.state.add('MainMenu', Menu, false);
-            this.state.add('Level1', Level1, false);
+            this.state.add('Play', Play, false);
             this.state.start('Boot');
         }
     }
