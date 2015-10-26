@@ -4,12 +4,9 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/**
- * Created by aksharpatel on 27/03/15.
- */
 /// <reference path="Phaser/phaser.d.ts"/>
-var Castlevania;
-(function (Castlevania) {
+var Pumpkin;
+(function (Pumpkin) {
     var Preloader = (function (_super) {
         __extends(Preloader, _super);
         function Preloader() {
@@ -23,6 +20,6 @@ var Castlevania;
         };
         return Preloader;
     })(Phaser.State);
-    Castlevania.Preloader = Preloader;
-})(Castlevania || (Castlevania = {}));
+    Pumpkin.Preloader = Preloader;
+})(Pumpkin || (Pumpkin = {}));
 //# sourceMappingURL=Preloader.js.map

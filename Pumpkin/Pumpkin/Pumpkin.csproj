@@ -35,6 +35,7 @@
     <TypeScriptCompile Include="Phaser\pixi.d.ts" />
     <TypeScriptCompile Include="Play.ts" />
     <TypeScriptCompile Include="Preloader.ts" />
+    <TypeScriptCompile Include="Pumpkin.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Phaser\phaser.map" />

@@ -1,6 +1,6 @@
 ﻿
 /// <reference path="Phaser/phaser.d.ts"/>
-module Castlevania {
+module Pumpkin {
     export class Menu extends Phaser.State {
 
         create() {

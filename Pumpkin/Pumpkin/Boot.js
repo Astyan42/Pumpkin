@@ -5,8 +5,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = new __();
 };
 /// <reference path="Phaser/phaser.d.ts"/>
-var Castlevania;
-(function (Castlevania) {
+var Pumpkin;
+(function (Pumpkin) {
     var Boot = (function (_super) {
         __extends(Boot, _super);
         function Boot() {
@@ -36,6 +36,6 @@ var Castlevania;
         };
         return Boot;
     })(Phaser.State);
-    Castlevania.Boot = Boot;
-})(Castlevania || (Castlevania = {}));
+    Pumpkin.Boot = Boot;
+})(Pumpkin || (Pumpkin = {}));
 //# sourceMappingURL=Boot.js.map
