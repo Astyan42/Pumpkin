@@ -4,9 +4,6 @@ var __extends = (this && this.__extends) || function (d, b) {
     __.prototype = b.prototype;
     d.prototype = new __();
 };
-/**
- * Created by aksharpatel on 27/03/15.
- */
 /// <reference path="Phaser/phaser.d.ts"/>
 var Castlevania;
 (function (Castlevania) {

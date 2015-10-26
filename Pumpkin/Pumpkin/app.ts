@@ -1,7 +1,4 @@
-﻿/**
- * Created by aksharpatel on 27/03/15.
- */
-/// <reference path="Phaser/phaser.d.ts"/>
+﻿/// <reference path="Phaser/phaser.d.ts"/>
 /// <reference path="Boot.ts"/>
 /// <reference path="Preloader.ts"/>
 /// <reference path="Menu.ts"/>
