@@ -19,14 +19,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
-<<<<<<< HEAD
     <Content Include="Assets\block.png" />
     <Content Include="Assets\pumpkin.png" />
     <Content Include="Assets\wall.png" />
-=======
     <Content Include="Assets\corde.png" />
     <Content Include="Assets\phaser.png" />
->>>>>>> origin/master
     <Content Include="index.html" />
     <Content Include="Phaser\phaser.js" />
     <Content Include="Phaser\phaser.min.js" />
