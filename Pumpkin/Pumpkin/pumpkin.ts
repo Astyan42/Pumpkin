@@ -5,9 +5,9 @@
             super(game, x, y, 'pumpkin', 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
-
-            this.game.physics.enable(this, Phaser.Physics.ARCADE);
-            this.body.mass = 200;
+            game.physics.p2.enable(this);
+            this.body.setCircle(20);
+            this.body.collideWorldBounds = false;
         }
     }
 }

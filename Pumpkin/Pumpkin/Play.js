@@ -21,40 +21,67 @@ var Pumpkin;
             this.game.load.image("block", "Assets/block.png");
         };
         Play.prototype.create = function () {
-            this.game.physics.startSystem(Phaser.Physics.ARCADE);
-            this.game.physics.arcade.gravity.y = 400;
+            this.game.physics.startSystem(Phaser.Physics.P2JS);
+            this.game.physics.p2.setImpactEvents(true);
+            this.game.physics.p2.gravity.y = 800;
+            this.game.physics.p2.restitution = 0.8;
+            this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
+            this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
             this.pumpkin = new Pumpkin.Pumpkin(this.game, this.game.world.centerX, this.game.world.centerY);
-            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 10, "rope");
-            this.rope.alive = false;
-            this.rope.visible = false;
-            this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
             this.pumpkin.width = 100;
             this.pumpkin.height = 70;
-            this.physicGroupBlocks = this.game.add.physicsGroup(false);
+            this.pumpkin.body.data.gravityScale = 0;
+            this.blocks = this.game.add.group();
+            this.blocks.enableBody = true;
+            this.blocks.physicsBodyType = Phaser.Physics.P2JS;
             for (var i = 0; i < 30; i++) {
-                var bloc = this.physicGroupBlocks.create(i * 32, 0, "block");
+                var block = this.blocks.create(i * 32, 0, "block");
+                block.body.setRectangle(block.width, block.height);
+                block.body.kinematic = true;
+                block.body.setCollisionGroup([this.blockCollisionGroup]);
+                block.body.collides([this.ropeCollisionGroup]);
+                block.body.data.gravityScale = 0;
+                block.anchor.set(0, 0);
             }
+            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 10, "rope");
+            this.game.physics.p2.enable(this.rope);
+            this.rope.anchor.set(0, 0);
+            this.rope.body.setRectangle(this.rope.width, this.rope.height);
+            this.rope.body.data.gravityScale = 0;
+            this.rope.body.fixedRotation = true;
+            this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
+            this.rope.body.collides(this.blockCollisionGroup, this.fixRope, this);
+            this.rope.alive = false;
+            this.rope.visible = false;
+            this.rope.body.dynamic = true;
+            this.ropeStopGrowing = false;
+            this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
         };
         Play.prototype.update = function () {
             // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
             this.background.tilePosition.x -= 2;
-            if (this.rope && this.rope.alive) {
-                this.rope.width += 25;
+            if (this.rope && this.rope.alive && !this.ropeStopGrowing) {
+                this.rope.width += 10;
+                this.rope.body.setRectangle(this.rope.width, this.rope.height);
+                this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
                 this.rope.x = this.pumpkin.x;
                 this.rope.y = this.pumpkin.y;
             }
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
             }
-            this.counterBlockPosition += 2;
-            if (this.counterBlockPosition >= 32) {
-                var bloc = this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "block");
-                this.counterBlockPosition = 0;
-            }
-            this.physicGroupBlocks.position.x -= 2;
+            //this.counterBlockPosition += 2;
+            //if (this.counterBlockPosition >= 32) {
+            //    var block = this.blocks.create(this.blocks.children.length * 32, 0, "block");
+            //    block.body.setRectangle(block.width, block.height);
+            //    block.body.setCollisionGroup(this.blockCollisionGroup);
+            //    block.body.data.gravityScale = 0;
+            //    this.counterBlockPosition = 0;
+            //}
+            //this.blocks.position.x -= 2;
         };
         Play.prototype.shootRope = function () {
             this.rope.width = 0;
@@ -62,6 +89,9 @@ var Pumpkin;
             this.rope.visible = true;
             this.rope.rotation = this.game.physics.arcade.angleToPointer(this.rope);
             this.pumpkin.bringToTop();
+        };
+        Play.prototype.fixRope = function (body1, body2) {
+            this.ropeStopGrowing = true;
         };
         return Play;
     })(Phaser.State);
