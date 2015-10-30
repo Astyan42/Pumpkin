@@ -1,26 +1,31 @@
-var SimpleGame = (function () {
-    function SimpleGame() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, "content", { preload: this.preload, create: this.create, update: this.update });
-    }
-    SimpleGame.prototype.preload = function () {
-        this.game.load.image("pumpkin", "Assets/pumpkin.png");
-        this.game.load.image("wall", "Assets/wall.png");
-    };
-    SimpleGame.prototype.create = function () {
-        // create background first
-        this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
-        this.pumpkin = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "pumpkin");
-        this.pumpkin.anchor.setTo(0.5, 0.5);
-        this.pumpkin.width = 100;
-        this.pumpkin.height = 70;
-    };
-    SimpleGame.prototype.update = function () {
-        // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
-        this.background.tilePosition.x -= 2;
-    };
-    return SimpleGame;
-})();
+/// <reference path="Phaser/phaser.d.ts"/>
+/// <reference path="Boot.ts"/>
+/// <reference path="Preloader.ts"/>
+/// <reference path="Menu.ts"/>
+/// <reference path="Play.ts"/>
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var Pumpkin;
+(function (Pumpkin) {
+    var Game = (function (_super) {
+        __extends(Game, _super);
+        function Game() {
+            _super.call(this, 800, 600, Phaser.AUTO, "");
+            this.state.add("Boot", Pumpkin.Boot, false);
+            this.state.add("Preloader", Pumpkin.Preloader, false);
+            this.state.add("Menu", Pumpkin.Menu, false);
+            this.state.add("Play", Pumpkin.Play, false);
+            this.state.start("Boot");
+        }
+        return Game;
+    })(Phaser.Game);
+    Pumpkin.Game = Game;
+})(Pumpkin || (Pumpkin = {}));
 window.onload = function () {
-    var game = new SimpleGame();
+    new Pumpkin.Game();
 };
 //# sourceMappingURL=app.js.map
