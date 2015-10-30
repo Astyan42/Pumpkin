@@ -12,6 +12,9 @@ var Pumpkin;
             _super.call(this, game, x, y, 'pumpkin', 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
+            this.physicsEnabled = true;
+            this.physicsType = Phaser.Physics.ARCADE;
+            this.game.physics.enable(this, Phaser.Physics.ARCADE);
         }
         Pumpkin.prototype.update = function () {
             if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
@@ -35,4 +38,4 @@ var Pumpkin;
     })(Phaser.Sprite);
     Pumpkin_1.Pumpkin = Pumpkin;
 })(Pumpkin || (Pumpkin = {}));
-//# sourceMappingURL=Pumpkin.js.map
+//# sourceMappingURL=pumpkin.js.map

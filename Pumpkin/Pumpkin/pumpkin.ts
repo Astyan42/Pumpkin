@@ -7,6 +7,10 @@
             super(game, x, y, 'pumpkin', 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
+
+            this.physicsEnabled = true;
+            this.physicsType = Phaser.Physics.ARCADE;
+            this.game.physics.enable(this, Phaser.Physics.ARCADE);
         }
 
         update() {
