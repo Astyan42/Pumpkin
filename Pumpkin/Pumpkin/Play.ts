@@ -14,9 +14,9 @@ module Pumpkin {
 
         preload() {
             this.game.load.image('sprite', 'assets/corde.png');
-            this.game.load.image("wall", "Assets/background_.jpg"); 
+            this.game.load.image("wall", "Assets/background_.jpg");
             this.game.load.image("pumpkin", "Assets/pumpkin.png");
-            this.game.load.spritesheet("block", "Assets/block.png", 32, 32); 
+            this.game.load.image("block", "Assets/block.png");
         }
         create() {
 
@@ -27,22 +27,36 @@ module Pumpkin {
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
 
             this.pumpkin = new Pumpkin(this.game, this.game.world.centerX, this.game.world.centerY);
-            
+
             this.pumpkin.width = 100;
             this.pumpkin.height = 70;
             this.physicGroupBlocks = this.game.add.physicsGroup(<any>false);
 
 
+
             for (var i = 0; i < 30; i++) {
-                this.physicGroupBlocks.create(i * 32, 0, "block");
+                var bloc: Phaser.Sprite = this.physicGroupBlocks.create(i * 32, 0, "block");
             }
-
-
         }
+
+
+        private counterBlockPosition: number = 0;
+
         update() {
             // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
             this.background.tilePosition.x -= 2;
+
+            this.counterBlockPosition += 2;
+
+            if (this.counterBlockPosition >= 32) {
+
+                var bloc: Phaser.Sprite = this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "block");
+                this.counterBlockPosition = 0;
+            }
+
+            this.physicGroupBlocks.position.x -= 2
+
         }
-        
+
     }
 }

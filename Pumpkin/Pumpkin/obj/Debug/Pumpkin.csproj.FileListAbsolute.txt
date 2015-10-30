@@ -9,3 +9,4 @@ C:\Users\abauzac\Projects\Pumpkin\Pumpkin\Pumpkin\bin\Pumpkin.dll
 C:\Users\abauzac\Projects\Pumpkin\Pumpkin\Pumpkin\bin\Pumpkin.pdb
 C:\Users\abauzac\Projects\Pumpkin\Pumpkin\Pumpkin\obj\Debug\Pumpkin.dll
 C:\Users\abauzac\Projects\Pumpkin\Pumpkin\Pumpkin\obj\Debug\Pumpkin.pdb
+C:\Users\abauzac\Projects\Pumpkin\Pumpkin\Pumpkin\obj\Debug\Pumpkin.csprojResolveAssemblyReference.cache
