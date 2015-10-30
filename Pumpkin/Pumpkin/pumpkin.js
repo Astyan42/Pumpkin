@@ -12,28 +12,9 @@ var Pumpkin;
             _super.call(this, game, x, y, 'pumpkin', 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
-            this.physicsEnabled = true;
-            this.physicsType = Phaser.Physics.ARCADE;
             this.game.physics.enable(this, Phaser.Physics.ARCADE);
+            this.body.mass = 200;
         }
-        Pumpkin.prototype.update = function () {
-            if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
-                this.shootRope();
-            }
-            if (this.rope && this.rope.alive) {
-                this.rope.width += 25;
-            }
-        };
-        Pumpkin.prototype.shootRope = function () {
-            if (this.rope) {
-                this.rope.destroy();
-            }
-            this.rope = this.game.add.tileSprite(this.x, this.y, 0, 10, "sprite");
-            this.rope.width = 0;
-            this.rope.alive = true;
-            this.rope.rotation = this.game.physics.arcade.angleToPointer(this.rope);
-            this.bringToTop();
-        };
         return Pumpkin;
     })(Phaser.Sprite);
     Pumpkin_1.Pumpkin = Pumpkin;

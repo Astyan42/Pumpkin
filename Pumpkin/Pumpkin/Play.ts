@@ -80,6 +80,7 @@ module Pumpkin {
             this.rope.alive = true;
             this.rope.visible = true;
             this.rope.rotation = this.game.physics.arcade.angleToPointer(this.rope);
+            this.pumpkin.bringToTop();
         }
     }
 }
