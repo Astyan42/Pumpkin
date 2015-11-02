@@ -8,13 +8,13 @@ module Pumpkin {
         private currentX = 0;
         public physicGroupBlocks: Phaser.Group;
         private rope: Phaser.TileSprite;
+        private shoot: Phaser.Sprite;
         private spaceKey:Phaser.Key;
         game: Phaser.Game;
 
 
         preload() {
-
-            this.game.load.image('rope', 'assets/corde.png');
+            this.game.load.image('rope', 'Assets/corde.png');
             this.game.load.image("wall", "Assets/background_.jpg"); 
             this.game.load.image("pumpkin", "Assets/pumpkin.png");
             this.game.load.image("block", "Assets/block.png");
@@ -28,7 +28,8 @@ module Pumpkin {
 
             this.pumpkin = new Pumpkin(this.game, this.game.world.centerX, this.game.world.centerY);
 
-            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 10, "rope");
+            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 83, "rope");
+            this.rope.anchor.set(0,0.5);
             this.rope.alive = false;
             this.rope.visible = false;
 
@@ -71,11 +72,12 @@ module Pumpkin {
                 this.counterBlockPosition = 0;
             }
 
-            this.physicGroupBlocks.position.x -= 2
+            this.physicGroupBlocks.position.x -= 2;
 
         }
 
         shootRope() {
+
             this.rope.width = 0;
             this.rope.alive = true;
             this.rope.visible = true;

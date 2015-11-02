@@ -1,8 +1,7 @@
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="Phaser/phaser.d.ts"/>
 var Pumpkin;
@@ -15,7 +14,7 @@ var Pumpkin;
             this.counterBlockPosition = 0;
         }
         Play.prototype.preload = function () {
-            this.game.load.image('rope', 'assets/corde.png');
+            this.game.load.image('rope', 'Assets/corde.png');
             this.game.load.image("wall", "Assets/background_.jpg");
             this.game.load.image("pumpkin", "Assets/pumpkin.png");
             this.game.load.image("block", "Assets/block.png");
@@ -26,7 +25,8 @@ var Pumpkin;
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
             this.pumpkin = new Pumpkin.Pumpkin(this.game, this.game.world.centerX, this.game.world.centerY);
-            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 10, "rope");
+            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 83, "rope");
+            this.rope.anchor.set(0, 0.5);
             this.rope.alive = false;
             this.rope.visible = false;
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
