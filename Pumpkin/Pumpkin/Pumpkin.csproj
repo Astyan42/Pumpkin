@@ -20,10 +20,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
-    <Content Include="Assets\block.png" />
+    <Content Include="Assets\caillou.png" />
+    <Content Include="Assets\grapin.png" />
+    <Content Include="Assets\corde2.png" />
     <Content Include="Assets\pumpkin.png" />
-    <Content Include="Assets\corde.png" />
     <Content Include="Assets\lumiere.png" />
+    <Content Include="Assets\texture_bg.png" />
     <Content Include="Assets\wall.png" />
     <Content Include="Assets\phaser.png" />
     <Content Include="index.html" />

@@ -11,7 +11,13 @@ var Pumpkin;
         function Menu() {
             _super.apply(this, arguments);
         }
+        Menu.prototype.preload = function () {
+            this.game.load.image('splash', 'Assets/splash.png');
+        };
         Menu.prototype.create = function () {
+            var background = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "splash");
+            background.anchor.setTo(0.5, 0.5);
+            background.scale.setTo(0.5, 0.5);
             this.input.onDown.addOnce(this.startGame, this);
         };
         Menu.prototype.startGame = function () {
