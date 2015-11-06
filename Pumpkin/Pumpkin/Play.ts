@@ -95,20 +95,23 @@ module Pumpkin {
                 this.shootRope();
             }
 
-            //this.counterBlockPosition += 2;
+            this.counterBlockPosition += 2;
 
-            //if (this.counterBlockPosition >= 32) {
-            //    var block = this.blocks.create(this.blocks.children.length * 32, 0, "block");
-            //    block.body.setRectangle(block.width, block.height);
-            //    block.body.setCollisionGroup(this.blockCollisionGroup);
-            //    block.body.data.gravityScale = 0;
-            //    this.counterBlockPosition = 0;
-            //}
+            if (this.counterBlockPosition >= 32) {
+                var block = this.blocks.create(this.blocks.children.length * 32, 0, "block");
+                block.body.setRectangle(block.width, block.height);
+                block.body.setCollisionGroup(this.blockCollisionGroup);
+                block.body.data.gravityScale = 0;
+                block.anchor.set(0, 0);
+                this.counterBlockPosition = 0;
+            }
 
-            //this.blocks.position.x -= 2;
+            this.blocks.position.x -= 2;
 
         }
 
+        // Launch a projectile that must have a velocity.
+        // Width is not enough to fire collision event
         shootRope() {
             this.rope.width = 0;
             this.rope.alive = true;
