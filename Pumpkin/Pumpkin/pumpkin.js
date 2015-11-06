@@ -9,11 +9,16 @@ var Pumpkin;
     var Pumpkin = (function (_super) {
         __extends(Pumpkin, _super);
         function Pumpkin(game, x, y) {
+            var _this = this;
             _super.call(this, game, x, y, 'pumpkin', 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
             this.game.physics.enable(this, Phaser.Physics.ARCADE);
             this.body.mass = 200;
+            this.checkWorldBounds = true;
+            this.events.onOutOfBounds.add(function () {
+                _this.game.state.start("Gameover", true, false);
+            }, this);
         }
         return Pumpkin;
     })(Phaser.Sprite);

@@ -10,7 +10,10 @@ module Pumpkin {
         private rope: Phaser.TileSprite;
         private spaceKey:Phaser.Key;
         game: Phaser.Game;
-
+        
+        private score = 0;
+        private scoreText: Phaser.Text;
+        private scoreString = "{s} points !";
 
         preload() {
 
@@ -39,7 +42,7 @@ module Pumpkin {
             this.pumpkin.height = 70;
             this.physicGroupBlocks = this.game.add.physicsGroup(<any>false);
 
-
+            this.scoreText = this.game.add.text(16, 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
 
             for (var i = 0; i < 30; i++) {
                 var bloc: Phaser.Sprite = this.physicGroupBlocks.create(i * 32, 0, "block");
@@ -48,10 +51,16 @@ module Pumpkin {
 
 
         private counterBlockPosition: number = 0;
+        /**
+         * Speed in pixel/framerate
+         */
+        private speed: number = 2;
+
+        private nbBlock = 0;
 
         update() {
             // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
-            this.background.tilePosition.x -= 2;
+            this.background.tilePosition.x -= this.speed;
 
             if (this.rope && this.rope.alive) {
                 this.rope.width += 25;
@@ -63,15 +72,28 @@ module Pumpkin {
                 this.shootRope();
             }
 
-            this.counterBlockPosition += 2;
+
+            this.counterBlockPosition += this.speed;
 
             if (this.counterBlockPosition >= 32) {
-
-                var bloc: Phaser.Sprite = this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "block");
+                if (Math.round(Math.random())) {
+                    this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32 + this.nbBlock*32, 0, "block");
+                    this.score += 10;
+                } else {
+                    this.nbBlock++;
+                    //this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "");
+                    this.score += 20;
+                }
+                this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
                 this.counterBlockPosition = 0;
             }
 
-            this.physicGroupBlocks.position.x -= 2
+            // level 1 : > 1000 => increase speed
+            //if (this.score > 300 && this.speed < 4) {
+            //    this.speed = 4;
+            //}
+
+            this.physicGroupBlocks.position.x -= this.speed;
 
         }
 

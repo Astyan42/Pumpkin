@@ -8,6 +8,12 @@
 
             this.game.physics.enable(this, Phaser.Physics.ARCADE);
             this.body.mass = 200;
+
+            this.checkWorldBounds = true;
+
+            this.events.onOutOfBounds.add(() => {
+                this.game.state.start("Gameover", true, false);
+            }, this);
         }
     }
 }

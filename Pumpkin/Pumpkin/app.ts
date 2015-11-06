@@ -10,6 +10,7 @@ module Pumpkin {
             super(800, 600, Phaser.AUTO, "");
             this.state.add("Boot", Boot, false);
             this.state.add("Preloader", Preloader, false);
+            this.state.add("Gameover", GameOver, false);
             this.state.add("Menu", Menu, false);
             this.state.add("Play", Play, false);
             this.state.start("Boot");

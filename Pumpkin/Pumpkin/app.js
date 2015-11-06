@@ -17,6 +17,7 @@ var Pumpkin;
             _super.call(this, 800, 600, Phaser.AUTO, "");
             this.state.add("Boot", Pumpkin.Boot, false);
             this.state.add("Preloader", Pumpkin.Preloader, false);
+            this.state.add("Gameover", Pumpkin.GameOver, false);
             this.state.add("Menu", Pumpkin.Menu, false);
             this.state.add("Play", Pumpkin.Play, false);
             this.state.start("Boot");

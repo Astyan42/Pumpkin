@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="Assets\block.png" />
+    <Content Include="Assets\gameover.png" />
     <Content Include="Assets\pumpkin.png" />
     <Content Include="Assets\wall.png" />
     <Content Include="Assets\corde.png" />
@@ -32,6 +33,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="Boot.ts" />
+    <TypeScriptCompile Include="GameOver.ts" />
     <TypeScriptCompile Include="Menu.ts" />
     <TypeScriptCompile Include="Phaser\p2.d.ts" />
     <TypeScriptCompile Include="Phaser\phaser.d.ts" />
