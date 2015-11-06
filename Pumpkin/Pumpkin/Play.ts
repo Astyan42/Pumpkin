@@ -111,19 +111,20 @@ module Pumpkin {
          */
         private speed: number = 2;
 
-        private nbBlock = 0;
-
+        private emptyBlock = 0;
+        private nextBlockPosition = 32;
+        private updateTicks = 0;
         update() {
-            // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
+            this.updateTicks ++;
             this.background.tilePosition.x -= this.speed;
+            this.blocks.position.x -= this.speed;
+            this.nextBlockPosition -= this.speed;
 
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
             }
             
-
-            //this.game.debug.spriteInfo(this.ropeHead,32,32);
-            //this.game.debug.spriteBounds(this.ropeHead);
+            
             if (this.rope && this.rope.alive && !this.ropeStopGrowing) {
                 this.rope.width = Math.ceil(Phaser.Math.distance(this.ropeHead.x,this.ropeHead.y,this.pumpkin.x,this.pumpkin.y));
                 this.rope.x = this.pumpkin.x;
@@ -132,34 +133,28 @@ module Pumpkin {
             }
 
             
-
-
-            this.counterBlockPosition += this.speed;
-
-            if (this.counterBlockPosition >= 32) {
-                if (Math.round(Math.random())) {
-                    var block = this.blocks.create(this.blocks.children.length * 32 + this.nbBlock * 32, 0, "block");
+            if (this.nextBlockPosition <= 0) {
+                this.nextBlockPosition = 32;
+                if (Math.random() > 0.66) {
+                    var block = this.blocks.create(this.blocks.length * 32 + this.nextBlockPosition + this.emptyBlock, 0, "block");
                     block.body.setRectangle(block.width, block.height);
                     block.body.setCollisionGroup(this.blockCollisionGroup);
                     block.body.data.gravityScale = 0;
                     block.anchor.set(0, 0);
                     this.score += 10;
                 } else {
-                    this.nbBlock++;
-                    //this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "");
                     this.score += 20;
+                    this.emptyBlock += 32;
                 }
-                this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
-                this.counterBlockPosition = 0;
             }
+            this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
+                
             
-            this.blocks.position.x -= 2;
             // level 1 : > 1000 => increase speed
             //if (this.score > 300 && this.speed < 4) {
             //    this.speed = 4;
             //}
             
-            this.blocks.position.x -= this.speed;
         }
 
         // Launch a projectile that must have a velocity.
