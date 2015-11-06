@@ -10,7 +10,14 @@ var Pumpkin;
         __extends(Play, _super);
         function Play() {
             _super.apply(this, arguments);
+            this.score = 0;
+            this.scoreString = "{s} points !";
             this.counterBlockPosition = 0;
+            /**
+             * Speed in pixel/framerate
+             */
+            this.speed = 2;
+            this.nbBlock = 0;
         }
         Play.prototype.preload = function () {
             this.game.load.image('rope', 'Assets/corde2.png');
@@ -53,10 +60,16 @@ var Pumpkin;
             var count = 0;
             this.rope.updateAnimation = function () {
                 count += 0.1;
-                for (var i = 0; i < points.length; i++) {
-                    points[i].y = Math.sin(i * 0.5 + count) * 20;
+                for (var i_1 = 0; i_1 < points.length; i_1++) {
+                    points[i_1].y = Math.sin(i_1 * 0.5 + count) * 20;
                 }
             };
+            this.game.physics.p2.enable(this.rope);
+            this.rope.body.setRectangle(this.rope.width, this.rope.height);
+            this.rope.body.data.gravityScale = 0;
+            this.rope.body.fixedRotation = true;
+            this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
+            this.rope.body.collides(this.blockCollisionGroup, this.fixRope, this);
             this.rope.alive = false;
             this.rope.visible = false;
             this.ropeStopGrowing = false;
@@ -66,10 +79,13 @@ var Pumpkin;
             this.game.physics.arcade.enable(this.ropeHead);
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+            this.pumpkin.width = 100;
+            this.pumpkin.height = 70;
+            this.scoreText = this.game.add.text(16, 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
         };
         Play.prototype.update = function () {
             // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
-            this.background.tilePosition.x -= 2;
+            this.background.tilePosition.x -= this.speed;
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
             }
@@ -81,16 +97,30 @@ var Pumpkin;
                 this.rope.y = this.pumpkin.y;
                 this.rope.rotation = this.game.physics.arcade.angleToXY(this.pumpkin, this.ropeHead.x, this.ropeHead.y);
             }
-            this.counterBlockPosition += 2;
+            this.counterBlockPosition += this.speed;
             if (this.counterBlockPosition >= 32) {
-                var block = this.blocks.create(this.blocks.children.length * 32, 0, "block");
-                block.body.setRectangle(block.width, block.height);
-                block.body.setCollisionGroup(this.blockCollisionGroup);
-                block.body.data.gravityScale = 0;
-                block.anchor.set(0, 0);
+                if (Math.round(Math.random())) {
+                    var block = this.blocks.create(this.blocks.children.length * 32 + this.nbBlock * 32, 0, "block");
+                    block.body.setRectangle(block.width, block.height);
+                    block.body.setCollisionGroup(this.blockCollisionGroup);
+                    block.body.data.gravityScale = 0;
+                    block.anchor.set(0, 0);
+                    this.score += 10;
+                }
+                else {
+                    this.nbBlock++;
+                    //this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "");
+                    this.score += 20;
+                }
+                this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
                 this.counterBlockPosition = 0;
             }
             this.blocks.position.x -= 2;
+            // level 1 : > 1000 => increase speed
+            //if (this.score > 300 && this.speed < 4) {
+            //    this.speed = 4;
+            //}
+            this.blocks.position.x -= this.speed;
         };
         // Launch a projectile that must have a velocity.
         // Width is not enough to fire collision event

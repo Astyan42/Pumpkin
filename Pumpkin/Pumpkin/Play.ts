@@ -18,8 +18,10 @@ module Pumpkin {
         private blockCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         
         private spaceKey:Phaser.Key;
-        game: Phaser.Game;
-
+        
+        private score = 0;
+        private scoreText: Phaser.Text;
+        private scoreString = "{s} points !";
 
         preload() {
             this.game.load.image('rope', 'Assets/corde2.png');
@@ -53,7 +55,7 @@ module Pumpkin {
             this.blocks = this.game.add.group();
             this.blocks.enableBody = true;
             this.blocks.physicsBodyType = Phaser.Physics.P2JS;
-            for (let i = 0; i < 30; i++) {
+            for (var i = 0; i < 30; i++) {
                 var block = this.blocks.create(i * 32, 0, "block");
                 block.body.setRectangle(block.width, block.height);
                 block.body.kinematic = true;
@@ -66,7 +68,7 @@ module Pumpkin {
             var points = [];
             var length = 150 / 20;
 
-            for (let i = 0; i < 20; i++) {
+            for (var i = 0; i < 20; i++) {
                 points.push(new Phaser.Point(i * length, 0));
             }
             this.rope = this.game.add.rope(this.pumpkin.x, this.pumpkin.y, 'rope', null, points);
@@ -74,12 +76,18 @@ module Pumpkin {
             var count = 0;
             this.rope.updateAnimation = () => {
                 count += 0.1;
-
                 for (let i = 0; i < points.length; i++) {
                     points[i].y = Math.sin(i * 0.5 + count) * 20;
                 }
             };
             
+            
+            this.game.physics.p2.enable(this.rope);
+            this.rope.body.setRectangle(this.rope.width, this.rope.height);
+            this.rope.body.data.gravityScale = 0;
+            this.rope.body.fixedRotation = true;
+            this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
+            this.rope.body.collides(this.blockCollisionGroup, this.fixRope,this);
             this.rope.alive = false;
             this.rope.visible = false;
             this.ropeStopGrowing = false;
@@ -91,15 +99,23 @@ module Pumpkin {
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
-
+            this.pumpkin.width = 100;
+            this.pumpkin.height = 70;
+            this.scoreText = this.game.add.text(16, 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
         }
 
 
         private counterBlockPosition: number = 0;
+        /**
+         * Speed in pixel/framerate
+         */
+        private speed: number = 2;
+
+        private nbBlock = 0;
 
         update() {
             // background http://examples.phaser.io/_site/view_full.html?d=games&f=invaders.js&t=invaders
-            this.background.tilePosition.x -= 2;
+            this.background.tilePosition.x -= this.speed;
 
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
@@ -117,18 +133,33 @@ module Pumpkin {
 
             
 
-            this.counterBlockPosition += 2;
+
+            this.counterBlockPosition += this.speed;
 
             if (this.counterBlockPosition >= 32) {
-                var block = this.blocks.create(this.blocks.children.length * 32, 0, "block");
-                block.body.setRectangle(block.width, block.height);
-                block.body.setCollisionGroup(this.blockCollisionGroup);
-                block.body.data.gravityScale = 0;
-                block.anchor.set(0, 0);
+                if (Math.round(Math.random())) {
+                    var block = this.blocks.create(this.blocks.children.length * 32 + this.nbBlock * 32, 0, "block");
+                    block.body.setRectangle(block.width, block.height);
+                    block.body.setCollisionGroup(this.blockCollisionGroup);
+                    block.body.data.gravityScale = 0;
+                    block.anchor.set(0, 0);
+                    this.score += 10;
+                } else {
+                    this.nbBlock++;
+                    //this.physicGroupBlocks.create(this.physicGroupBlocks.children.length * 32, 0, "");
+                    this.score += 20;
+                }
+                this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
                 this.counterBlockPosition = 0;
             }
-
+            
             this.blocks.position.x -= 2;
+            // level 1 : > 1000 => increase speed
+            //if (this.score > 300 && this.speed < 4) {
+            //    this.speed = 4;
+            //}
+            
+            this.blocks.position.x -= this.speed;
         }
 
         // Launch a projectile that must have a velocity.

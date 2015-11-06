@@ -7,6 +7,7 @@
             super(game, x, y, "pumpkin", 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
+
             game.physics.p2.enable(this);
             this.width = 100;
             this.height = 88;
@@ -20,7 +21,14 @@
             light.alpha = 0.3;
             var anim = light.animations.add('glow');
             anim.play(10, true);
+            
+            this.body.mass = 200;
 
+            this.checkWorldBounds = true;
+
+            this.events.onOutOfBounds.add(() => {
+                this.game.state.start("Gameover", true, false);
+            }, this);
         }
     }
 }

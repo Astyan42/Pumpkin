@@ -8,6 +8,7 @@ var Pumpkin;
     var Pumpkin = (function (_super) {
         __extends(Pumpkin, _super);
         function Pumpkin(game, x, y) {
+            var _this = this;
             _super.call(this, game, x, y, "pumpkin", 0);
             this.anchor.setTo(0.5, 0.5);
             game.add.existing(this);
@@ -23,9 +24,14 @@ var Pumpkin;
             light.alpha = 0.3;
             var anim = light.animations.add('glow');
             anim.play(10, true);
+            this.body.mass = 200;
+            this.checkWorldBounds = true;
+            this.events.onOutOfBounds.add(function () {
+                _this.game.state.start("Gameover", true, false);
+            }, this);
         }
         return Pumpkin;
     })(Phaser.Sprite);
     Pumpkin_1.Pumpkin = Pumpkin;
 })(Pumpkin || (Pumpkin = {}));
-//# sourceMappingURL=Pumpkin.js.map
+//# sourceMappingURL=pumpkin.js.map
