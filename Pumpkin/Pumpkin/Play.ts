@@ -8,16 +8,25 @@ module Pumpkin {
         private currentX = 0;
         public blocks: Phaser.Group;
         private rope: Phaser.TileSprite;
+<<<<<<< HEAD
         private spaceKey: Phaser.Key;
         private ropeCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         private blockCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         private ropeStopGrowing:boolean;
 
+=======
+        private shoot: Phaser.Sprite;
+        private spaceKey:Phaser.Key;
+>>>>>>> origin/master
         game: Phaser.Game;
 
 
         preload() {
+<<<<<<< HEAD
             this.game.load.image('rope', 'assets/corde.png');
+=======
+            this.game.load.image('rope', 'Assets/corde.png');
+>>>>>>> origin/master
             this.game.load.image("wall", "Assets/background_.jpg"); 
             this.game.load.image("pumpkin", "Assets/pumpkin.png");
             this.game.load.image("block", "Assets/block.png");
@@ -57,6 +66,7 @@ module Pumpkin {
             }
 
 
+<<<<<<< HEAD
             this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 10, "rope");
             this.game.physics.p2.enable(this.rope);
             this.rope.anchor.set(0, 0);
@@ -65,6 +75,10 @@ module Pumpkin {
             this.rope.body.fixedRotation = true;
             this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
             this.rope.body.collides(this.blockCollisionGroup, this.fixRope,this);
+=======
+            this.rope = this.game.add.tileSprite(this.pumpkin.x, this.pumpkin.y, 0, 83, "rope");
+            this.rope.anchor.set(0,0.5);
+>>>>>>> origin/master
             this.rope.alive = false;
             this.rope.visible = false;
             this.rope.body.dynamic = true;
@@ -106,13 +120,18 @@ module Pumpkin {
                 this.counterBlockPosition = 0;
             }
 
+<<<<<<< HEAD
             this.blocks.position.x -= 2;
+=======
+            this.physicGroupBlocks.position.x -= 2;
+>>>>>>> origin/master
 
         }
 
         // Launch a projectile that must have a velocity.
         // Width is not enough to fire collision event
         shootRope() {
+
             this.rope.width = 0;
             this.rope.alive = true;
             this.rope.visible = true;

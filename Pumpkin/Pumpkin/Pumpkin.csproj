@@ -10,19 +10,21 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <TypeScriptToolsVersion>1.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>1.6</TypeScriptToolsVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="Assets\block.png" />
     <Content Include="Assets\pumpkin.png" />
-    <Content Include="Assets\wall.png" />
     <Content Include="Assets\corde.png" />
+    <Content Include="Assets\lumiere.png" />
+    <Content Include="Assets\wall.png" />
     <Content Include="Assets\phaser.png" />
     <Content Include="index.html" />
     <Content Include="Phaser\phaser.js" />
