@@ -28,7 +28,6 @@
     <Content Include="Assets\lumiere.png" />
     <Content Include="Assets\texture_bg.png" />
     <Content Include="Assets\wall.png" />
-    <Content Include="Assets\phaser.png" />
     <Content Include="index.html" />
     <Content Include="Phaser\phaser.js" />
     <Content Include="Phaser\phaser.min.js" />
@@ -68,7 +67,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50564</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
