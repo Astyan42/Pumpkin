@@ -27,7 +27,7 @@
             this.checkWorldBounds = true;
 
             this.events.onOutOfBounds.add(() => {
-                this.game.state.start("Gameover", true, false);
+                this.game.state.start("Gameover", true, false, (<Play>this.game.state.getCurrentState()).score);
             }, this);
         }
     }

@@ -19,7 +19,7 @@ module Pumpkin {
         
         private spaceKey:Phaser.Key;
         
-        private score = 0;
+        public score = 0;
         private scoreText: Phaser.Text;
         private scoreString = "{s} points !";
 
@@ -51,17 +51,17 @@ module Pumpkin {
             this.pumpkin.body.data.gravityScale = 0;
 
             
-
             this.blocks = this.game.add.group();
             this.blocks.enableBody = true;
             this.blocks.physicsBodyType = Phaser.Physics.P2JS;
             for (var i = 0; i < 30; i++) {
-                var block = this.blocks.create(i * 32, 0, "block");
-                block.body.setRectangle(block.width, block.height);
-                block.body.kinematic = true;
-                block.body.setCollisionGroup([this.blockCollisionGroup]);
-                block.body.collides([this.ropeCollisionGroup]);
-                block.body.data.gravityScale = 0;
+                var block: Phaser.Sprite = this.blocks.create(i * 32, 0, "block");
+                var body: Phaser.Physics.P2.Body = block.body;
+                body.setRectangle(block.width, block.height);
+                body.kinematic = true;
+                body.setCollisionGroup(this.blockCollisionGroup);
+                body.collides([this.ropeCollisionGroup]);
+                body.data.gravityScale = 0;
                 block.anchor.set(0, 0);
             }
 
@@ -101,7 +101,8 @@ module Pumpkin {
 
             this.pumpkin.width = 100;
             this.pumpkin.height = 70;
-            this.scoreText = this.game.add.text(16, 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
+            this.scoreText = this.game.add.text(
+                this.game.world.width - 150, this.game.world.height - 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
         }
 
 
@@ -114,6 +115,8 @@ module Pumpkin {
         private emptyBlock = 0;
         private nextBlockPosition = 32;
         private updateTicks = 0;
+        private numberOfEmptyBlocksInARow = 0;
+
         update() {
             this.updateTicks ++;
             this.background.tilePosition.x -= this.speed;
@@ -135,14 +138,20 @@ module Pumpkin {
             
             if (this.nextBlockPosition <= 0) {
                 this.nextBlockPosition = 32;
-                if (Math.random() > 0.66) {
-                    var block = this.blocks.create(this.blocks.length * 32 + this.nextBlockPosition + this.emptyBlock, 0, "block");
+                if (Math.random() > 0.66 || this.numberOfEmptyBlocksInARow == 4) {
+                    var block: Phaser.Sprite = this.blocks.create(this.blocks.length * 32 + this.nextBlockPosition + this.emptyBlock, 0, "block");
                     block.body.setRectangle(block.width, block.height);
                     block.body.setCollisionGroup(this.blockCollisionGroup);
                     block.body.data.gravityScale = 0;
                     block.anchor.set(0, 0);
+                    block.events.onOutOfBounds.add(() => {
+                        block.destroy();
+                    }, this);
+                    
+                    this.numberOfEmptyBlocksInARow = 0;
                     this.score += 10;
                 } else {
+                    this.numberOfEmptyBlocksInARow++;
                     this.score += 20;
                     this.emptyBlock += 32;
                 }
