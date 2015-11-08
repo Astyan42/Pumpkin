@@ -35,6 +35,7 @@ module Pumpkin {
         create() {
             this.game.physics.startSystem(Phaser.Physics.P2JS);
             this.game.physics.p2.setImpactEvents(true);
+            this.game.physics.p2.setBoundsToWorld(false,false,false,false);
             this.game.physics.p2.gravity.y = 800;
             this.game.physics.p2.restitution = 0.8;
 
@@ -57,45 +58,30 @@ module Pumpkin {
             for (var i = 0; i < 30; i++) {
                 var block: Phaser.Sprite = this.blocks.create(i * 32, 0, "block");
                 var body: Phaser.Physics.P2.Body = block.body;
-                body.setRectangle(block.width, block.height);
                 body.kinematic = true;
+                body.setRectangle(block.width, block.height);
                 body.setCollisionGroup(this.blockCollisionGroup);
-                body.collides([this.ropeCollisionGroup]);
+                body.collides(this.ropeCollisionGroup);
                 body.data.gravityScale = 0;
                 block.anchor.set(0, 0);
             }
 
-            var points = [];
-            var length = 150 / 20;
-
-            for (var i = 0; i < 20; i++) {
-                points.push(new Phaser.Point(i * length, 0));
-            }
-            this.rope = this.game.add.rope(this.pumpkin.x, this.pumpkin.y, 'rope', null, points);
-
-            var count = 0;
-            this.rope.updateAnimation = () => {
-                count += 0.1;
-                for (let i = 0; i < points.length; i++) {
-                    points[i].y = Math.sin(i * 0.5 + count) * 20;
-                }
-            };
-            
-            
-            this.game.physics.p2.enable(this.rope);
-            this.rope.body.setRectangle(this.rope.width, this.rope.height);
-            this.rope.body.data.gravityScale = 0;
-            this.rope.body.fixedRotation = true;
-            this.rope.body.setCollisionGroup(this.ropeCollisionGroup);
-            this.rope.body.collides(this.blockCollisionGroup, this.fixRope,this);
-            this.rope.alive = false;
-            this.rope.visible = false;
             this.ropeStopGrowing = false;
 
             this.ropeHead = this.game.add.sprite(this.pumpkin.x, this.pumpkin.y, "grapin");
-            this.ropeHead.visible = false;
             this.ropeHead.anchor.setTo(0, 0.5);
-            this.game.physics.arcade.enable(this.ropeHead);
+            
+            this.game.physics.p2.enable(this.ropeHead);
+
+            this.ropeHead.body.setRectangle(this.ropeHead.width, this.ropeHead.height);
+            this.ropeHead.body.data.gravityScale = 0;
+            this.ropeHead.body.fixedRotation = true;
+            this.ropeHead.body.collideWorldBounds = false;
+            this.ropeHead.body.setCollisionGroup(this.ropeCollisionGroup);
+            this.ropeHead.body.collides(this.blockCollisionGroup, this.fixRope, this);
+            this.game.physics.p2.updateBoundsCollisionGroup();
+            this.ropeHead.alive = false;
+            this.ropeHead.visible = false;
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
@@ -127,22 +113,16 @@ module Pumpkin {
                 this.shootRope();
             }
             
-            
-            if (this.rope && this.rope.alive && !this.ropeStopGrowing) {
-                this.rope.width = Math.ceil(Phaser.Math.distance(this.ropeHead.x,this.ropeHead.y,this.pumpkin.x,this.pumpkin.y));
-                this.rope.x = this.pumpkin.x;
-                this.rope.y = this.pumpkin.y;
-                this.rope.rotation = this.game.physics.arcade.angleToXY(this.pumpkin, this.ropeHead.x, this.ropeHead.y);
-            }
-
-            
             if (this.nextBlockPosition <= 0) {
                 this.nextBlockPosition = 32;
                 if (Math.random() > 0.66 || this.numberOfEmptyBlocksInARow == 4) {
                     var block: Phaser.Sprite = this.blocks.create(this.blocks.length * 32 + this.nextBlockPosition + this.emptyBlock, 0, "block");
-                    block.body.setRectangle(block.width, block.height);
-                    block.body.setCollisionGroup(this.blockCollisionGroup);
-                    block.body.data.gravityScale = 0;
+                    var body: Phaser.Physics.P2.Body = block.body;
+                    body.setRectangle(block.width, block.height);
+                    body.kinematic = true;
+                    body.setCollisionGroup(this.blockCollisionGroup);
+                    body.collides([this.ropeCollisionGroup]);
+                    body.data.gravityScale = 0;
                     block.anchor.set(0, 0);
                     block.events.onOutOfBounds.add(() => {
                         block.destroy();
@@ -169,20 +149,17 @@ module Pumpkin {
         // Launch a projectile that must have a velocity.
         // Width is not enough to fire collision event
         shootRope() { 
-            this.rope.width = 0;
-            this.rope.alive = true;
-            this.rope.visible = true;
             this.ropeHead.visible = true;
-            this.ropeHead.x = this.pumpkin.x;
-            this.ropeHead.y = this.pumpkin.y;
+            this.ropeHead.body.x = this.pumpkin.x;
+            this.ropeHead.body.y = this.pumpkin.y;
             this.ropeHead.rotation = this.game.physics.arcade.angleToPointer(this.ropeHead);
             this.game.physics.arcade.moveToPointer(this.ropeHead,600);
-            //this.game.physics.arcade.accelerateToXY(this.ropeHead,this.impactX, this.impactY, 1000);
             this.pumpkin.bringToTop();
         }
 
         fixRope(body1,body2) {
             this.ropeStopGrowing = true;
+            this.ropeHead.body.setZeroVelocity();
         }
 
         

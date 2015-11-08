@@ -27,7 +27,7 @@ var Pumpkin;
             this.body.mass = 200;
             this.checkWorldBounds = true;
             this.events.onOutOfBounds.add(function () {
-                _this.game.state.start("Gameover", true, false);
+                _this.game.state.start("Gameover", true, false, _this.game.state.getCurrentState().score);
             }, this);
         }
         return Pumpkin;
