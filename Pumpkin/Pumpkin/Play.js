@@ -38,7 +38,7 @@ var Pumpkin;
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false, false, false, false);
             this.game.physics.p2.gravity.y = 1400;
-            this.game.physics.p2.restitution = 1;
+            this.game.physics.p2.restitution = 0.2;
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.pumpkinCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
@@ -46,22 +46,22 @@ var Pumpkin;
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
             this.pumpkin = new Pumpkin.Pumpkin(this.game, 50, this.game.world.centerY);
-            this.blocks = this.game.add.group();
             for (var i = 0; i < 30; i++) {
                 var block = this.game.add.sprite(i * 32 + 16, 16, "block");
                 this.game.physics.p2.enable(block);
                 var body = block.body;
                 body.kinematic = true;
                 body.setRectangle(block.width, block.height);
-                body.setRectangle(block.width, block.height);
                 body.setCollisionGroup(this.blockCollisionGroup);
-                body.collides(this.ropeCollisionGroup);
+                body.collides([this.ropeCollisionGroup, this.pumpkinCollisionGroup]);
                 body.data.gravityScale = 0;
                 body.velocity.x = -this.speed;
                 block.events.onOutOfBounds.add(function () {
                     block.destroy();
                 }, this);
             }
+            this.pumpkin.body.setCollisionGroup(this.pumpkinCollisionGroup);
+            this.pumpkin.body.collides(this.blockCollisionGroup);
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
             this.anchorGroup = this.game.add.group();
@@ -84,17 +84,16 @@ var Pumpkin;
             }
             if (this.nextBlockPosition <= 0) {
                 this.nextBlockPosition = 32;
-                if (Math.random() > 0.66 || this.numberOfEmptyBlocksInARow == 4) {
-                    var block = this.blocks.create(this.blocks.length * 32 + 16 + this.nextBlockPosition + this.emptyBlock, 16, "block");
+                if (Math.random() > 0.98) {
+                    var block = this.game.add.sprite(this.game.world.width + 16, 16, "block");
                     this.game.physics.p2.enable(block);
                     var body = block.body;
                     body.setRectangle(block.width, block.height);
                     body.kinematic = true;
                     body.setCollisionGroup(this.blockCollisionGroup);
-                    body.collides([this.ropeCollisionGroup]);
+                    body.collides([this.ropeCollisionGroup, this.pumpkinCollisionGroup]);
                     body.data.gravityScale = 0;
                     body.velocity.x = -this.speed;
-                    body.updateCollisionMask();
                     block.events.onOutOfBounds.add(function () {
                         block.destroy();
                     }, this);
@@ -114,6 +113,7 @@ var Pumpkin;
             this.cleanAnchors();
             this.ropeHead = this.anchorGroup.create(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
+            this.ropeHead.body.debug = true;
             this.ropeHead.body.clearShapes();
             this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
             this.ropeHead.body.data.gravityScale = 0;
