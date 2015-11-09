@@ -22,8 +22,8 @@
             var anim = light.animations.add('glow');
             anim.play(10, true);
             
-            this.body.mass = 200;
-
+            this.body.mass = 4;
+            this.body.data.gravityScale = 1;
             this.checkWorldBounds = true;
 
             this.events.onOutOfBounds.add(() => {

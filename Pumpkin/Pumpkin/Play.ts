@@ -10,17 +10,16 @@ module Pumpkin {
         public blocks: Phaser.Group;
         private rope: Phaser.Rope;
         
+        private wallAnchor;
         private ropeHead: Phaser.Sprite;
-        private ropeStopGrowing: boolean;
-
-        private spring: Phaser.Physics.P2.Spring;
-        private distanceConstraint : Phaser.Physics.P2.DistanceConstraint;
-
+        private anchorGroup :Phaser.Group;
         private ropeCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         private blockCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         
         private spaceKey:Phaser.Key;
         
+        private constraints = [];
+        private ropeDocked:boolean;
         public score = 0;
         private scoreText: Phaser.Text;
         private scoreString = "{s} points !";
@@ -38,12 +37,12 @@ module Pumpkin {
             this.game.physics.startSystem(Phaser.Physics.P2JS);
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false,false,false,false);
-            this.game.physics.p2.gravity.y = 400;
+            this.game.physics.p2.gravity.y = 1400;
             this.game.physics.p2.restitution = 1;
 
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
-
+            this.ropeDocked = false;
 
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
@@ -67,14 +66,10 @@ module Pumpkin {
                     block.destroy();
                 }, this);
             }
-
-            this.ropeStopGrowing = false;
+            
 
             this.ropeHead = this.game.add.sprite(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
-            this.ropeHead.body.debug = true;
-            this.ropeHead.body.debugBody.x = this.ropeHead.x;
-            this.ropeHead.body.debugBody.y = this.ropeHead.y;
             this.ropeHead.body.setRectangle(this.ropeHead.width, this.ropeHead.height);
             this.ropeHead.body.data.gravityScale = 0;
             this.ropeHead.body.fixedRotation = true;
@@ -86,6 +81,8 @@ module Pumpkin {
             this.ropeHead.visible = false;
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+
+            this.anchorGroup = this.game.add.group();
 
             this.pumpkin.width = 100;
             this.pumpkin.height = 70;
@@ -109,6 +106,13 @@ module Pumpkin {
             this.updateTicks ++;
             this.background.tilePosition.x -= 2;
             this.nextBlockPosition -= this.speed;
+
+            this.clearConstraints();
+            
+            if (this.ropeDocked) {
+                if (this.dist >= 40) { this.dist -= 10; }
+                this.constraints.push(this.game.physics.p2.createDistanceConstraint(this.pumpkin, this.wallAnchor, this.dist));
+            }
 
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
@@ -147,32 +151,55 @@ module Pumpkin {
 
         // Launch a projectile that must have a velocity.
         // Width is not enough to fire collision event
-        shootRope() { 
-            this.ropeHead.visible = true;
-            this.ropeHead.body.x = this.pumpkin.x;
-            this.ropeHead.body.y = this.pumpkin.y;
-            this.ropeHead.rotation = this.game.physics.arcade.angleToPointer(this.ropeHead);
-            this.ropeHead.body.rotation = this.ropeHead.rotation;
-            this.game.physics.arcade.moveToPointer(this.ropeHead,1000);
+        private sensorAngle;
+
+        shootRope() {
+            this.cleanAnchors();
+            this.ropeHead = this.anchorGroup.create(this.pumpkin.x, this.pumpkin.y, "grapin");
+            this.game.physics.p2.enable(this.ropeHead);
+            this.sensorAngle = Math.atan2(this.game.camera.y + this.game.input.y - this.pumpkin.y, this.game.camera.x + this.game.input.x - this.pumpkin.x);
+            this.sensorAngle = Phaser.Math.radToDeg(this.sensorAngle);
+            this.ropeHead.angle = this.sensorAngle;
+            this.game.physics.arcade.moveToPointer(this.ropeHead,1800);
             this.pumpkin.bringToTop();
         }
 
-        fixRope(body1,body2) {
-            body1.setZeroVelocity();
-            body1.velocity.x = body2.velocity.x;
-            this.pumpkin.body.velocity.x=0;
+        fixRope(sensor,ground) {
+            var sensorX = sensor.x;  //get x and y from the sensor where it collided
+            var sensorY = sensor.y;
+            sensor.sprite.kill();
 
-            this.spring = this.game.physics.p2.createSpring(
-                body2,  // sprite 1
-                this.pumpkin, // sprite 2
-                200,       // length of the rope
-                200,        // stiffness
-                10         // damping
-            );
+            this.wallAnchor = this.anchorGroup.create(sensorX, sensorY, 'grapin');
+            this.game.physics.p2.enable(this.wallAnchor);
+            this.wallAnchor.body.angle = this.sensorAngle;
+            this.wallAnchor.body.static = true;
 
-           // this.distanceConstraint = this.game.physics.p2.createDistanceConstraint(this.pumpkin, body2, 250);
+            this.dist = this.distanceBetweenPoints([this.pumpkin.x, this.pumpkin.y], [sensorX, sensorY]);  //point [x,y], point [x,y]
+            this.constraints.push(this.game.physics.p2.createDistanceConstraint(this.pumpkin, this.wallAnchor, this.dist));
+
+            this.ropeDocked = true; 
         }
 
-        
+        cleanAnchors() {
+            this.ropeDocked = false;
+            this.clearConstraints();
+            this.anchorGroup.destroy(true, true);  // destroy children, dont destroy group	
+        }
+
+        clearConstraints() {
+            for (var i = 0; i <= this.constraints.length; i++) {
+                 this.game.physics.p2.removeConstraint(this.constraints[i]);
+            }
+            this.constraints = [];
+        }
+
+        distanceBetweenPoints(pointA, pointB) {
+            var dx = pointA[0] - pointB[0];  //distance ship X to enemy X
+            var dy = pointA[1] - pointB[1];  //distance ship Y to enemy Y
+            var distance = Math.sqrt(dx * dx + dy * dy);     //pythagoras ^^  (get the distance to each other)
+            return distance;
+        }
+
+        dist: number;
     }
 }
