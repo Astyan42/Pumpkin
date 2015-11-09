@@ -16,7 +16,7 @@ var Pumpkin;
             /**
              * Speed in pixel/framerate
              */
-            this.speed = 2;
+            this.speed = 50;
             this.emptyBlock = 0;
             this.nextBlockPosition = 32;
             this.updateTicks = 0;
@@ -34,32 +34,35 @@ var Pumpkin;
             this.game.physics.startSystem(Phaser.Physics.P2JS);
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false, false, false, false);
-            this.game.physics.p2.gravity.y = 800;
-            this.game.physics.p2.restitution = 0.8;
+            this.game.physics.p2.gravity.y = 400;
+            this.game.physics.p2.restitution = 1;
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
-            this.pumpkin = new Pumpkin.Pumpkin(this.game, this.game.world.centerX, this.game.world.centerY);
-            //todo remove debug
-            this.pumpkin.body.data.gravityScale = 0;
+            this.pumpkin = new Pumpkin.Pumpkin(this.game, 50, this.game.world.centerY);
             this.blocks = this.game.add.group();
-            this.blocks.enableBody = true;
-            this.blocks.physicsBodyType = Phaser.Physics.P2JS;
             for (var i = 0; i < 30; i++) {
-                var block = this.blocks.create(i * 32, 0, "block");
+                var block = this.game.add.sprite(i * 32 + 16, 16, "block");
+                this.game.physics.p2.enable(block);
                 var body = block.body;
                 body.kinematic = true;
+                body.setRectangle(block.width, block.height);
                 body.setRectangle(block.width, block.height);
                 body.setCollisionGroup(this.blockCollisionGroup);
                 body.collides(this.ropeCollisionGroup);
                 body.data.gravityScale = 0;
-                block.anchor.set(0, 0);
+                body.velocity.x = -this.speed;
+                block.events.onOutOfBounds.add(function () {
+                    block.destroy();
+                }, this);
             }
             this.ropeStopGrowing = false;
             this.ropeHead = this.game.add.sprite(this.pumpkin.x, this.pumpkin.y, "grapin");
-            this.ropeHead.anchor.setTo(0, 0.5);
             this.game.physics.p2.enable(this.ropeHead);
+            this.ropeHead.body.debug = true;
+            this.ropeHead.body.debugBody.x = this.ropeHead.x;
+            this.ropeHead.body.debugBody.y = this.ropeHead.y;
             this.ropeHead.body.setRectangle(this.ropeHead.width, this.ropeHead.height);
             this.ropeHead.body.data.gravityScale = 0;
             this.ropeHead.body.fixedRotation = true;
@@ -77,8 +80,7 @@ var Pumpkin;
         };
         Play.prototype.update = function () {
             this.updateTicks++;
-            this.background.tilePosition.x -= this.speed;
-            this.blocks.position.x -= this.speed;
+            this.background.tilePosition.x -= 2;
             this.nextBlockPosition -= this.speed;
             if (this.spaceKey.isDown && !this.spaceKey.downDuration()) {
                 this.shootRope();
@@ -86,14 +88,16 @@ var Pumpkin;
             if (this.nextBlockPosition <= 0) {
                 this.nextBlockPosition = 32;
                 if (Math.random() > 0.66 || this.numberOfEmptyBlocksInARow == 4) {
-                    var block = this.blocks.create(this.blocks.length * 32 + this.nextBlockPosition + this.emptyBlock, 0, "block");
+                    var block = this.blocks.create(this.blocks.length * 32 + 16 + this.nextBlockPosition + this.emptyBlock, 16, "block");
+                    this.game.physics.p2.enable(block);
                     var body = block.body;
                     body.setRectangle(block.width, block.height);
                     body.kinematic = true;
                     body.setCollisionGroup(this.blockCollisionGroup);
                     body.collides([this.ropeCollisionGroup]);
                     body.data.gravityScale = 0;
-                    block.anchor.set(0, 0);
+                    body.velocity.x = -this.speed;
+                    body.updateCollisionMask();
                     block.events.onOutOfBounds.add(function () {
                         block.destroy();
                     }, this);
@@ -107,10 +111,6 @@ var Pumpkin;
                 }
             }
             this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
-            // level 1 : > 1000 => increase speed
-            //if (this.score > 300 && this.speed < 4) {
-            //    this.speed = 4;
-            //}
         };
         // Launch a projectile that must have a velocity.
         // Width is not enough to fire collision event
@@ -119,12 +119,21 @@ var Pumpkin;
             this.ropeHead.body.x = this.pumpkin.x;
             this.ropeHead.body.y = this.pumpkin.y;
             this.ropeHead.rotation = this.game.physics.arcade.angleToPointer(this.ropeHead);
-            this.game.physics.arcade.moveToPointer(this.ropeHead, 600);
+            this.ropeHead.body.rotation = this.ropeHead.rotation;
+            this.game.physics.arcade.moveToPointer(this.ropeHead, 1000);
             this.pumpkin.bringToTop();
         };
         Play.prototype.fixRope = function (body1, body2) {
-            this.ropeStopGrowing = true;
-            this.ropeHead.body.setZeroVelocity();
+            body1.setZeroVelocity();
+            body1.velocity.x = body2.velocity.x;
+            this.pumpkin.body.velocity.x = 0;
+            this.spring = this.game.physics.p2.createSpring(body2, // sprite 1
+            this.pumpkin, // sprite 2
+            200, // length of the rope
+            200, // stiffness
+            10 // damping
+            );
+            // this.distanceConstraint = this.game.physics.p2.createDistanceConstraint(this.pumpkin, body2, 250);
         };
         return Play;
     })(Phaser.State);
