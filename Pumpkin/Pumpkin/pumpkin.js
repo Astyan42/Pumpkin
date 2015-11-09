@@ -36,4 +36,4 @@ var PumpkinNinja;
     })(Phaser.Sprite);
     PumpkinNinja.Pumpkin = Pumpkin;
 })(PumpkinNinja || (PumpkinNinja = {}));
-//# sourceMappingURL=Pumpkin.js.map
+//# sourceMappingURL=pumpkin.js.map

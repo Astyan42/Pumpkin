@@ -14,7 +14,7 @@ var PumpkinNinja;
             this.score = score;
         };
         GameOver.prototype.preload = function () {
-            this.game.load.image('gameoverbg', 'assets/gameover.jpg');
+            this.game.load.image('gameoverbg', 'assets/gameover.png');
             this.game.load.image('tryagainbtn', 'assets/tryagain.png');
         };
         GameOver.prototype.create = function () {
