@@ -14,7 +14,7 @@
             this.body.setCircle(20);
             this.body.collideWorldBounds = false;
             
-            this.light = this.game.add.sprite(this.x, this.y, 'light');
+            this.light = this.game.add.sprite(this.x-this.width*1.3, this.y - this.game.world.height/2 - this.height/1.2, 'light');
             this.light.width = 150;
             this.light.height = 150;
             this.light.alpha = 0.3;
