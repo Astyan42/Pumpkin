@@ -11,8 +11,10 @@ module Pumpkin {
         
         private wallAnchor;
         private ropeHead: Phaser.Sprite;
-        private anchorGroup :Phaser.Group;
+        private anchorGroup: Phaser.Group;
+
         private ropeCollisionGroup: Phaser.Physics.P2.CollisionGroup;
+        private pumpkinCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         private blockCollisionGroup: Phaser.Physics.P2.CollisionGroup;
         
         private spaceKey:Phaser.Key;
@@ -44,6 +46,7 @@ module Pumpkin {
             this.game.physics.p2.restitution = 1;
 
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
+            this.pumpkinCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.ropeDocked = false;
 
@@ -71,30 +74,13 @@ module Pumpkin {
             }
 
 
-            this.ropeHead = this.game.add.sprite(this.pumpkin.x, this.pumpkin.y, "grapin");
-            this.game.physics.p2.enable(this.ropeHead);
-            this.ropeHead.body.debug = true;
-            this.ropeHead.body.clearShapes();
-            this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
-            this.ropeHead.body.data.gravityScale = 0;
-            this.ropeHead.body.fixedRotation = true;
-            this.ropeHead.body.collideWorldBounds = false;
-            this.ropeHead.body.setCollisionGroup(this.ropeCollisionGroup);
-            this.ropeHead.body.collides(this.blockCollisionGroup, this.fixRope, this);
-            this.game.physics.p2.updateBoundsCollisionGroup();
-            this.ropeHead.alive = false;
-            this.ropeHead.visible = false;
             this.spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
 
             this.anchorGroup = this.game.add.group();
-
-            this.pumpkin.width = 100;
-            this.pumpkin.height = 70;
-            this.scoreText = this.game.add.text(
-                this.game.world.width - 120, this.game.world.height - 42, this.scoreString, { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
-            this.scorePoints = this.game.add.text(
-                this.game.world.width - 180, this.game.world.height - 42, this.score.toString(), { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
+            
+            this.scoreText = this.game.add.text(this.game.world.width - 120, this.game.world.height - 42, this.scoreString, { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
+            this.scorePoints = this.game.add.text(this.game.world.width - 180, this.game.world.height - 42, this.score.toString(), { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
             
             
         }
@@ -116,7 +102,7 @@ module Pumpkin {
             this.background.tilePosition.x -= 2;
             this.nextBlockPosition -= this.speed;
 
-            this.clearConstraints();
+           this.clearConstraints();
             
             if (this.ropeDocked) {
                 if (this.dist >= 40) { this.dist -= 10; }
@@ -165,11 +151,22 @@ module Pumpkin {
 
         shootRope() { 
             this.cleanAnchors();
+
             this.ropeHead = this.anchorGroup.create(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
+            this.ropeHead.body.clearShapes();
+            this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
+            this.ropeHead.body.data.gravityScale = 0;
+            this.ropeHead.body.fixedRotation = true;
+            this.ropeHead.body.collideWorldBounds = false;
+            this.ropeHead.body.setCollisionGroup(this.ropeCollisionGroup);
+            this.ropeHead.body.collides(this.blockCollisionGroup, this.fixRope, this);
+
+            
             this.sensorAngle = Math.atan2(this.game.camera.y + this.game.input.y - this.pumpkin.y, this.game.camera.x + this.game.input.x - this.pumpkin.x);
             this.sensorAngle = Phaser.Math.radToDeg(this.sensorAngle);
             this.ropeHead.angle = this.sensorAngle;
+            this.ropeHead.body.angle = this.sensorAngle;
             this.game.physics.arcade.moveToPointer(this.ropeHead,1800);
             this.pumpkin.bringToTop();
         }
@@ -183,6 +180,7 @@ module Pumpkin {
             this.game.physics.p2.enable(this.wallAnchor);
             this.wallAnchor.body.angle = this.sensorAngle;
             this.wallAnchor.body.static = true;
+            this.wallAnchor.body.velocity.x = -this.speed;
 
             this.dist = this.distanceBetweenPoints([this.pumpkin.x, this.pumpkin.y], [sensorX, sensorY]);  //point [x,y], point [x,y]
             this.constraints.push(this.game.physics.p2.createDistanceConstraint(this.pumpkin, this.wallAnchor, this.dist));

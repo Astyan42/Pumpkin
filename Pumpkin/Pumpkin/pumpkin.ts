@@ -15,10 +15,10 @@
             this.body.collideWorldBounds = false;
             
             this.light = this.game.add.sprite(this.x, this.y, 'light');
-            this.light.anchor.setTo(0.5, 0.5);
             this.light.width = 150;
             this.light.height = 150;
             this.light.alpha = 0.3;
+            this.addChild(this.light);
             var anim = this.light.animations.add('glow');
             anim.play(10, true);
             
