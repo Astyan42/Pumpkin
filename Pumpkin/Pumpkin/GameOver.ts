@@ -12,9 +12,7 @@
         }
 
         preload() {
-
-            this.game.load.image('gameoverbg', 'assets/gameover.png');
-            this.game.load.image('tryagainbtn', 'assets/tryagain.png');
+            this.game.load.image('gameoverbg', 'Assets/gameover.png');
         }
 
         create() {
