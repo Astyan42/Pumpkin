@@ -23,7 +23,8 @@ module Pumpkin {
         
         public score = 0;
         private scoreText: Phaser.Text;
-        private scoreString = "{s} points !";
+        private scorePoints: Phaser.Text;
+        private scoreString = "points !";
 
         preload() {
             this.game.load.image('rope', 'Assets/corde2.png');
@@ -32,9 +33,12 @@ module Pumpkin {
             this.game.load.image("block", "Assets/caillou.png");
             this.game.load.image("grapin", "Assets/grapin.png");
             this.game.load.spritesheet('light', 'Assets/lumiere.png', 406, 424, 2);
+
+            this.game.load.physics('grapinPhysics', 'Assets/grapin.json');
         }
 
         create() {
+            this.score = 0;
             this.game.physics.startSystem(Phaser.Physics.P2JS);
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false,false,false,false);
@@ -73,9 +77,10 @@ module Pumpkin {
             this.ropeHead = this.game.add.sprite(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
             this.ropeHead.body.debug = true;
+            this.ropeHead.body.clearShapes();
+            this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
             this.ropeHead.body.debugBody.x = this.ropeHead.x;
-            this.ropeHead.body.debugBody.y = this.ropeHead.y;
-            this.ropeHead.body.setRectangle(this.ropeHead.width, this.ropeHead.height);
+            this.ropeHead.body.debugBody.y = this.ropeHead.y
             this.ropeHead.body.data.gravityScale = 0;
             this.ropeHead.body.fixedRotation = true;
             this.ropeHead.body.collideWorldBounds = false;
@@ -90,7 +95,11 @@ module Pumpkin {
             this.pumpkin.width = 100;
             this.pumpkin.height = 70;
             this.scoreText = this.game.add.text(
-                this.game.world.width - 150, this.game.world.height - 42, this.scoreString.replace("{s}", "0"), { fontSize: '22px', fill: '#fff' });
+                this.game.world.width - 120, this.game.world.height - 42, this.scoreString, { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
+            this.scorePoints = this.game.add.text(
+                this.game.world.width - 180, this.game.world.height - 42, this.score.toString(), { font: 'Homemade Apple', fontSize: '22px', fill: '#fff' });
+            
+            
         }
 
 
@@ -140,7 +149,8 @@ module Pumpkin {
                     this.emptyBlock += 32;
                 }
             }
-            this.scoreText.text = this.scoreString.replace("{s}", this.score.toString());
+            this.scorePoints.text = this.score.toString();
+            this.scorePoints.x = this.game.world.width - this.scoreText.width - 120;
                 
              
         }

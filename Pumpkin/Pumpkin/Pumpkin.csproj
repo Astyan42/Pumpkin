@@ -22,6 +22,7 @@
     <Content Include="app.css" />
     <Content Include="Assets\caillou.png" />
     <Content Include="Assets\gameover.jpg" />
+    <None Include="Assets\grapin.json" />
     <Content Include="Assets\grapin.png" />
     <Content Include="Assets\corde2.png" />
     <Content Include="Assets\pumpkin.png" />

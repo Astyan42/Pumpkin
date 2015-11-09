@@ -14,7 +14,8 @@ module Pumpkin {
             this.game.stage.backgroundColor = 0x0b101c;
             var background = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, "splash");
             background.anchor.setTo(0.5, 0.5);
-            background.scale.setTo(0.5,0.5);
+            background.scale.setTo(0.5, 0.5);
+            this.game.input.onDown
             this.input.onDown.addOnce(this.startGame, this);
 
             this.instructionText = this.game.add.text(0, 0, "Touch any key",
