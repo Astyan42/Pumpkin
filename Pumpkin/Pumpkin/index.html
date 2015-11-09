@@ -5,6 +5,22 @@
     <meta charset="utf-8" />
     <title>TypeScript HTML App</title>
     <link rel="stylesheet" href="app.css" type="text/css"/>
+    <link href='https://fonts.googleapis.com/css?family=Homemade+Apple' rel='stylesheet' type='text/css'>
+
+    <script type="text/javascript">
+  WebFontConfig = {
+    google: { families: [ 'Homemade+Apple::latin' ] }
+  };
+  (function() {
+    var wf = document.createElement('script');
+    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+    wf.type = 'text/javascript';
+    wf.async = 'true';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(wf, s);
+  })(); </script>
+
     <script src="Phaser/phaser.js"></script>
     <script src="app.js"></script>
     <script src="Boot.js"></script>

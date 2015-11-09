@@ -21,9 +21,9 @@
   <ItemGroup>
     <Content Include="app.css" />
     <Content Include="Assets\caillou.png" />
+    <Content Include="Assets\gameover.jpg" />
     <Content Include="Assets\grapin.png" />
     <Content Include="Assets\corde2.png" />
-    <Content Include="Assets\gameover.png" />
     <Content Include="Assets\pumpkin.png" />
     <Content Include="Assets\lumiere.png" />
     <Content Include="Assets\texture_bg.png" />
