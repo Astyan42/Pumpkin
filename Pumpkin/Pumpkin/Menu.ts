@@ -1,6 +1,6 @@
 ﻿
 /// <reference path="Phaser/phaser.d.ts"/>
-module Pumpkin {
+module PumpkinNinja {
     export class Menu extends Phaser.State {
 
         private instructionText: Phaser.Text;

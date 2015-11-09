@@ -4,7 +4,7 @@
 /// <reference path="Menu.ts"/>
 /// <reference path="Play.ts"/>
 
-module Pumpkin {
+module PumpkinNinja {
     export class Game extends Phaser.Game {
         constructor() {
             super(800, 600, Phaser.AUTO, "");
@@ -20,5 +20,5 @@ module Pumpkin {
 }
 
 window.onload = () => {
-    new Pumpkin.Game();
+    new PumpkinNinja.Game();
 };

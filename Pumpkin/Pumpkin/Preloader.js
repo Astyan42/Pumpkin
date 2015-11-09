@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="Phaser/phaser.d.ts"/>
-var Pumpkin;
-(function (Pumpkin) {
+var PumpkinNinja;
+(function (PumpkinNinja) {
     var Preloader = (function (_super) {
         __extends(Preloader, _super);
         function Preloader() {
@@ -19,6 +19,6 @@ var Pumpkin;
         };
         return Preloader;
     })(Phaser.State);
-    Pumpkin.Preloader = Preloader;
-})(Pumpkin || (Pumpkin = {}));
+    PumpkinNinja.Preloader = Preloader;
+})(PumpkinNinja || (PumpkinNinja = {}));
 //# sourceMappingURL=Preloader.js.map

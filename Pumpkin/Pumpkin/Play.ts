@@ -1,5 +1,5 @@
 ﻿/// <reference path="Phaser/phaser.d.ts"/>
-module Pumpkin {
+module PumpkinNinja {
     export class Play extends Phaser.State {
         private tilesprite;
         public background: Phaser.TileSprite;
@@ -42,7 +42,8 @@ module Pumpkin {
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false,false,false,false);
             this.game.physics.p2.gravity.y = 1400;
-            this.game.physics.p2.restitution = 0.2;
+
+
 
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.pumpkinCollisionGroup = this.game.physics.p2.createCollisionGroup();
@@ -54,7 +55,6 @@ module Pumpkin {
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
 
             this.pumpkin = new Pumpkin(this.game, 50, this.game.world.centerY);
-            
             for (var i = 0 ; i < 30; i++) {
                 var block: Phaser.Sprite = this.game.add.sprite(i * 32 + 16, 16, "block");
                 this.game.physics.p2.enable(block);
@@ -90,7 +90,7 @@ module Pumpkin {
         /**
          * Speed in pixel/framerate
          */
-        private speed: number = 50;
+        private speed: number = 100;
 
         private emptyBlock = 0;
         private nextBlockPosition = 32;
@@ -152,7 +152,6 @@ module Pumpkin {
             
             this.ropeHead = this.anchorGroup.create(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
-            this.ropeHead.body.debug = true;
             this.ropeHead.body.clearShapes();
             this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
             this.ropeHead.body.data.gravityScale = 0;

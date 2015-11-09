@@ -4,8 +4,8 @@ var __extends = (this && this.__extends) || function (d, b) {
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
 /// <reference path="Phaser/phaser.d.ts"/>
-var Pumpkin;
-(function (Pumpkin) {
+var PumpkinNinja;
+(function (PumpkinNinja) {
     var Play = (function (_super) {
         __extends(Play, _super);
         function Play() {
@@ -17,7 +17,7 @@ var Pumpkin;
             /**
              * Speed in pixel/framerate
              */
-            this.speed = 50;
+            this.speed = 100;
             this.emptyBlock = 0;
             this.nextBlockPosition = 32;
             this.updateTicks = 0;
@@ -38,14 +38,13 @@ var Pumpkin;
             this.game.physics.p2.setImpactEvents(true);
             this.game.physics.p2.setBoundsToWorld(false, false, false, false);
             this.game.physics.p2.gravity.y = 1400;
-            this.game.physics.p2.restitution = 0.2;
             this.ropeCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.pumpkinCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.blockCollisionGroup = this.game.physics.p2.createCollisionGroup();
             this.ropeDocked = false;
             // create background first
             this.background = this.game.add.tileSprite(0, 0, 800, 600, 'wall');
-            this.pumpkin = new Pumpkin.Pumpkin(this.game, 50, this.game.world.centerY);
+            this.pumpkin = new PumpkinNinja.Pumpkin(this.game, 50, this.game.world.centerY);
             for (var i = 0; i < 30; i++) {
                 var block = this.game.add.sprite(i * 32 + 16, 16, "block");
                 this.game.physics.p2.enable(block);
@@ -113,7 +112,6 @@ var Pumpkin;
             this.cleanAnchors();
             this.ropeHead = this.anchorGroup.create(this.pumpkin.x, this.pumpkin.y, "grapin");
             this.game.physics.p2.enable(this.ropeHead);
-            this.ropeHead.body.debug = true;
             this.ropeHead.body.clearShapes();
             this.ropeHead.body.loadPolygon("grapinPhysics", "grapin");
             this.ropeHead.body.data.gravityScale = 0;
@@ -160,6 +158,6 @@ var Pumpkin;
         };
         return Play;
     })(Phaser.State);
-    Pumpkin.Play = Play;
-})(Pumpkin || (Pumpkin = {}));
+    PumpkinNinja.Play = Play;
+})(PumpkinNinja || (PumpkinNinja = {}));
 //# sourceMappingURL=Play.js.map

@@ -1,6 +1,6 @@
 ﻿
 /// <reference path="Phaser/phaser.d.ts"/>
-module Pumpkin {
+module PumpkinNinja {
     export class Boot extends Phaser.State {
         preload() {
             

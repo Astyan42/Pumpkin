@@ -1,4 +1,4 @@
-﻿module Pumpkin {
+﻿module PumpkinNinja {
     export class GameOver extends Phaser.State {
 
 

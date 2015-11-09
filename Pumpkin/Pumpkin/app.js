@@ -8,24 +8,24 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var Pumpkin;
-(function (Pumpkin) {
+var PumpkinNinja;
+(function (PumpkinNinja) {
     var Game = (function (_super) {
         __extends(Game, _super);
         function Game() {
             _super.call(this, 800, 600, Phaser.AUTO, "");
-            this.state.add("Boot", Pumpkin.Boot, false);
-            this.state.add("Preloader", Pumpkin.Preloader, false);
-            this.state.add("Gameover", Pumpkin.GameOver, false);
-            this.state.add("Menu", Pumpkin.Menu, false);
-            this.state.add("Play", Pumpkin.Play, false);
+            this.state.add("Boot", PumpkinNinja.Boot, false);
+            this.state.add("Preloader", PumpkinNinja.Preloader, false);
+            this.state.add("Gameover", PumpkinNinja.GameOver, false);
+            this.state.add("Menu", PumpkinNinja.Menu, false);
+            this.state.add("Play", PumpkinNinja.Play, false);
             this.state.start("Boot");
         }
         return Game;
     })(Phaser.Game);
-    Pumpkin.Game = Game;
-})(Pumpkin || (Pumpkin = {}));
+    PumpkinNinja.Game = Game;
+})(PumpkinNinja || (PumpkinNinja = {}));
 window.onload = function () {
-    new Pumpkin.Game();
+    new PumpkinNinja.Game();
 };
 //# sourceMappingURL=app.js.map

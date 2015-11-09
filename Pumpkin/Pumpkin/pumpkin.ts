@@ -1,4 +1,4 @@
-﻿module Pumpkin {
+﻿module PumpkinNinja {
     export class Pumpkin extends Phaser.Sprite {
         
         private light:Phaser.Sprite;
@@ -13,7 +13,8 @@
             this.height = 88;
 
 
-            this.body.setCircle(20);
+            this.body.setCircle(40);
+            this.body.fixedRotation = true;
             this.body.collideWorldBounds = false;
             
             this.light = this.game.add.sprite(this.x-this.width*1.3, this.y - this.game.world.height/2 - this.height/1.2, 'light');
